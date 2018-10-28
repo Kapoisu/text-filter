@@ -33,8 +33,7 @@ int main()
         case 'f':
             cout << "input: ";
             cin >> input;
-            filter.filter(input);
-            cout << input;
+            cout << filter.filter(input) << endl;
             break;
         case 'q':
             quit = true;
@@ -42,7 +41,7 @@ int main()
         default:
             break;
         }
-    
+
         cin.ignore();
         cout << endl;
     } while(!quit);
