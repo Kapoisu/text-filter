@@ -1,9 +1,10 @@
 #ifndef STRING_FILTER
 #define STRING_FILTER
 
+#include <memory>
 #include <vector>
-#include <unordered_set>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace text_filter {
     class string_filter {
@@ -41,9 +42,18 @@ namespace text_filter {
         class aho_corasick {
         public:
             std::string operator()(std::string input, std::unordered_set<std::string> blocked_words);
+        private:
+            struct node {
+            public:
+                std::unordered_map<char, std::shared_ptr<node>> child;
+                node* suffix = nullptr;
+                node* dict_suffix = nullptr;
+            };
+            node root;
+            void build_trie(std::unordered_set<std::string> blocked_words);
+            void build_suffix();
         };
-
-
+        
         //TODO
     }
 }

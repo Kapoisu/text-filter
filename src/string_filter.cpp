@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <vector>
+#include <queue>
 #include "string_filter.hpp"
 
 namespace text_filter {
@@ -23,7 +24,7 @@ namespace text_filter {
 
     string string_filter::filter(string input)
     {
-        return filter(move(input), knuth_morris_pratt());
+        return filter(move(input), aho_corasick());
     }
 
     namespace algorithm {
@@ -122,10 +123,55 @@ namespace text_filter {
             offset_if_fail[key] = table;
         }
 
-        string aho_corasick(string input, unordered_set<string> blocked_words)
+        string aho_corasick::operator()(string input, unordered_set<string> blocked_words)
         {
+            build_trie(blocked_words);
+            build_suffix();
+            //TODO
 
-            
+            return "";
+        }
+
+        void aho_corasick::build_trie(unordered_set<string> blocked_words)
+        {
+            node* p = &(this->root);
+            for(auto const& word : blocked_words) {
+                for(auto const & c : word) {
+                    if(p->child.count(c) == 0) {
+                        p->child[c] = make_shared<node>();
+                    }
+
+                    p = p->child[c].get();
+                }
+                p = &(this->root);
+            }
+        }
+
+        void aho_corasick::build_suffix()
+        {
+            node *p;
+            queue<node*> q;
+            this->root.suffix = &(this->root);
+            q.push(&(this->root));
+
+            while(q.size() > 0) {
+                p = q.front();
+                for(auto const& n : p->child) {
+                    while(p->suffix->child.count(n.first) == 0) {
+                        p = p->suffix;
+                    }
+
+                    if(p == &(this->root)) {
+                        n.second->suffix = p;
+                    }
+                    else {
+                        n.second->suffix = p->suffix->child[n.first].get();
+                    }
+
+                    q.push(n.second.get());
+                }
+                q.pop();
+            }
         }
     }
 }
