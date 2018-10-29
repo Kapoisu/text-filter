@@ -24,7 +24,7 @@ namespace text_filter {
 
     string string_filter::filter(string input)
     {
-        return filter(move(input), knuth_morris_pratt());
+        return filter(move(input), aho_corasick());
     }
 
     namespace algorithm {
