@@ -12,6 +12,11 @@ namespace text_filter {
         blocked_words.insert(word);
     }
 
+    void string_filter::reset()
+    {
+        blocked_words.clear();
+    }
+
     unordered_set<string> string_filter::list_all_blocked_words() const
     {
         return blocked_words;
@@ -19,7 +24,7 @@ namespace text_filter {
 
     string string_filter::filter(string input)
     {
-        return filter(move(input), aho_corasick());
+        return filter(move(input), knuth_morris_pratt());
     }
 
     namespace algorithm {
@@ -135,14 +140,15 @@ namespace text_filter {
                         start = it;
                         p = &root;
                     }
-               }
-                else if(p == &root) {
-                    ++start;
-                    ++it;
                 }
                 else {
                     p = p->suffix;
-                    //++start;
+                    ++start;
+
+                    if(p == &root) {
+                        ++it;
+                        start = it;
+                    }
                 }
             }
 
@@ -194,6 +200,11 @@ namespace text_filter {
                 node *p = this; //parent
                 while(p->suffix->child.count(n.first) == 0) {
                     p = p->suffix;
+
+                    if(p == root) {
+                        n.second->suffix = p;
+                        break;
+                    }
                 }
 
                 if(p == root) {

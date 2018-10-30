@@ -10,6 +10,7 @@ namespace text_filter {
     class string_filter {
     public:
         void add_word(std::string word);
+        void reset();
         std::unordered_set<std::string> list_all_blocked_words() const;
         std::string filter(std::string input);
         template<typename FilterAlgorithm>
