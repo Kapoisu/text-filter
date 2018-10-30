@@ -12,11 +12,6 @@ namespace text_filter {
         blocked_words.insert(word);
     }
 
-    bool string_filter::search_word(string word) const
-    {
-        return blocked_words.count(word);
-    }
-
     unordered_set<string> string_filter::list_all_blocked_words() const
     {
         return blocked_words;
@@ -126,10 +121,32 @@ namespace text_filter {
         string aho_corasick::operator()(string input, unordered_set<string> blocked_words)
         {
             build_trie(blocked_words);
-            //build_suffix();
-            //TODO
 
-            return "";
+            node *p = &root;
+            auto start = input.cbegin();
+            auto it = input.cbegin();
+
+            while(it != input.cend()) {
+                if(p->child.count(*it) > 0) {
+                    p = p->child[*it++].get();
+
+                    if(p->inDict) {
+                        input.replace(start, it, distance(start, it), '*');
+                        start = it;
+                        p = &root;
+                    }
+               }
+                else if(p == &root) {
+                    ++start;
+                    ++it;
+                }
+                else {
+                    p = p->suffix;
+                    //++start;
+                }
+            }
+
+            return input;
         }
 
         void aho_corasick::build_trie(unordered_set<string> blocked_words)
@@ -147,54 +164,53 @@ namespace text_filter {
                 for(auto const& n : p.child) {
                     q.push(n.second.get());
                 }
-            }
-        }/*
 
-        void aho_corasick::build_suffix()
-        {
-            node *p;
-            queue<node*> q;
-            this->root.suffix = &(this->root);
-            q.push(&(this->root));
-
-            while(q.size() > 0) {
-                p = q.front();
-                for(auto const& n : p->child) {
-                    while(p->suffix->child.count(n.first) == 0) {
-                        p = p->suffix;
-                    }
-
-                    if(p == &(this->root)) {
-                        n.second->suffix = p;
-                    }
-                    else {
-                        n.second->suffix = p->suffix->child[n.first].get();
-                    }
-
-                    q.push(n.second.get());
-                }
                 q.pop();
             }
-        }*/
+        }
 
         void aho_corasick::node::add_word(string word)
         {
-            node &p = *this;
+            node *p = this;
 
             for(auto const& c : word) {
-                if(child.count(c) == 0) {
-                    p.child[c] = make_shared<node>();
+                if(p->child.count(c) == 0) {
+                    p->child[c] = make_shared<node>();
                 }
 
-                p = *p.child[c];
+                p = p->child[c].get();
             }
+
+            p->inDict = true;
         }
 
         void aho_corasick::node::add_suffix(node* root)
         {
             if(this == root) {
                 this->suffix = root;
-                this->dict_suffix = root;
+            }
+
+            for(auto const& n : child) {
+                node *p = this; //parent
+                while(p->suffix->child.count(n.first) == 0) {
+                    p = p->suffix;
+                }
+
+                if(p == root) {
+                    n.second->suffix = p;
+                }
+                else {
+                    n.second->suffix = p->suffix->child[n.first].get();
+                }
+
+                /* p = n.second->suffix;
+                while(!p->inDict && p != root) {
+                    p = p->suffix;
+                }
+
+                if(p != root) {
+                    n.second->dict_suffix = p;
+                } */
             }
         }
     }

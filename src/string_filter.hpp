@@ -10,7 +10,6 @@ namespace text_filter {
     class string_filter {
     public:
         void add_word(std::string word);
-        bool search_word(std::string word) const;
         std::unordered_set<std::string> list_all_blocked_words() const;
         std::string filter(std::string input);
         template<typename FilterAlgorithm>
@@ -45,17 +44,20 @@ namespace text_filter {
         private:
             struct node {
             public:
+                node() : inDict(false), suffix(nullptr)/*, dict_suffix(nullptr)*/ {}
                 void add_word(std::string);
                 void add_suffix(node* root);
                 std::unordered_map<char, std::shared_ptr<node>> child;
-                node* suffix = nullptr;
-                node* dict_suffix = nullptr;
+                bool inDict;
+                node* suffix;
+                //node* dict_suffix;
             };
+
             node root;
             void build_trie(std::unordered_set<std::string> blocked_words);
             void build_suffix();
         };
-        
+
         //TODO
     }
 }

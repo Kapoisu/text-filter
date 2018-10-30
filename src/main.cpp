@@ -16,7 +16,6 @@ int main()
         cout << "Enter the operation:" << endl;
         cout << "a: add word." << endl;
         cout << "f: filter the input." << endl;
-        cout << "s: search word." << endl;
         cout << "q: quit." << endl;
         cout << endl;
 
@@ -25,11 +24,6 @@ int main()
             cout << "add: ";
             cin >> input;
             filter.add_word(input);
-            break;
-        case 's':
-            cout << "search: ";
-            cin >> input;
-            cout << filter.search_word(input) << endl;
             break;
         case 'f':
             cout << "input: ";
