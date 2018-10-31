@@ -4,10 +4,14 @@
 #include "string_filter.hpp"
 
 namespace text_filter {
-    using namespace std;
+    using std::wstring;
+    using std::unordered_set;
+    using std::vector;
+    using std::queue;
+    using std::make_shared;
     using namespace algorithm;
 
-    void string_filter::add_word(string word)
+    void string_filter::add_word(wstring word)
     {
         blocked_words.insert(word);
     }
@@ -17,18 +21,18 @@ namespace text_filter {
         blocked_words.clear();
     }
 
-    unordered_set<string> string_filter::list_all_blocked_words() const
+    unordered_set<wstring> string_filter::list_all_blocked_words() const
     {
         return blocked_words;
     }
 
-    string string_filter::filter(string input)
+    wstring string_filter::filter(wstring input)
     {
         return filter(move(input), knuth_morris_pratt());
     }
 
     namespace algorithm {
-        string brute_force::operator()(string input, unordered_set<string> blocked_words)
+        wstring brute_force::operator()(wstring input, unordered_set<wstring> blocked_words)
         {
             for(auto const& word : blocked_words) {
                 input = operator()(move(input), word);
@@ -37,7 +41,7 @@ namespace text_filter {
             return input;
         }
 
-        string brute_force::operator()(string input, string word)
+        wstring brute_force::operator()(wstring input, wstring word)
         {
             for(auto i = 0; i < input.size() - word.size() + 1; ++i) {
                 bool matched = true;
@@ -56,7 +60,7 @@ namespace text_filter {
             return input;
         }
 
-        string knuth_morris_pratt::operator()(string input, unordered_set<string> blocked_words)
+        wstring knuth_morris_pratt::operator()(wstring input, unordered_set<wstring> blocked_words)
         {
             for(auto const& word : blocked_words) {
                 input = operator()(move(input), word);
@@ -65,7 +69,7 @@ namespace text_filter {
             return input;
         }
 
-        string knuth_morris_pratt::operator()(string input, string word)
+        wstring knuth_morris_pratt::operator()(wstring input, wstring word)
         {
             if(offset_if_fail.count(word) == 0) {
                 generate_table(word);
@@ -95,7 +99,7 @@ namespace text_filter {
             return input;
         }
 
-        void knuth_morris_pratt::generate_table(string key)
+        void knuth_morris_pratt::generate_table(wstring key)
         {
             vector<int> table(key.size() + 1);
 
@@ -123,7 +127,7 @@ namespace text_filter {
             offset_if_fail[key] = table;
         }
 
-        string aho_corasick::operator()(string input, unordered_set<string> blocked_words)
+        wstring aho_corasick::operator()(wstring input, unordered_set<wstring> blocked_words)
         {
             build_trie(blocked_words);
 
@@ -155,7 +159,7 @@ namespace text_filter {
             return input;
         }
 
-        void aho_corasick::build_trie(unordered_set<string> blocked_words)
+        void aho_corasick::build_trie(unordered_set<wstring> blocked_words)
         {
             for(auto const& word : blocked_words) {
                 root.add_word(word);
@@ -175,7 +179,7 @@ namespace text_filter {
             }
         }
 
-        void aho_corasick::node::add_word(string word)
+        void aho_corasick::node::add_word(wstring word)
         {
             node *p = this;
 
