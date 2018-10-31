@@ -3,33 +3,35 @@
 #include "test_filter.hpp"
 
 namespace text_filter {
-    using std::cin;
-    using std::cout;
-    using std::endl;
-    using std::string;
-    using std::wstring;
-    using std::wifstream;
-
     void test_filter::run()
     {
-        unsigned num;
-        wifstream dict;
+        using std::wcin;
+        using std::wcout;
+        using std::wifstream;
+        using std::wstring;
+        using std::endl;
 
-        cout << "starting to run test...\n" << endl;
-        cout << "enter the number of test case: ";
-        cin >> num;
-        do {
-            string filepath;
-            cout << "enter the dictionary filepath: ";
-            cin >> filepath;
-            dict.open(filepath);
-        } while(!dict.good());
+        unsigned num;
+        std::wifstream dict("pattern.txt");
+
+        wcout << "starting to run test...\n" << endl;
+        wcout << "enter the number of test case: ";
+        wcin >> num;
+
+        if(!dict.is_open()) {
+            wcout << "file not found." << endl;
+            return;
+        }
 
         wstring word;
         while(dict >> word) {
+            wcout << "add word: ";
+            wcout << word << endl;
             filter.add_word(word);
         }
 
-        cout << "test finish." << endl;
+        wcout << endl << "generating test cases...\n" << endl;
+
+        wcout << "test finish." << endl;
     }
 }
