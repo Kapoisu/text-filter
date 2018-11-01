@@ -10,27 +10,28 @@ namespace text_filter {
             build_trie(blocked_words);
 
             node *p = &root;
-            auto start = input.cbegin();
             auto it = input.cbegin();
 
             while(it != input.cend()) {
                 if(p->child.count(*it) > 0) {
                     p = p->child[*it++].get();
-
-                    if(p->inDict) {
-                        input.replace(start, it, distance(start, it), '*');
-                        start = it;
-                        p = &root;
-                    }
                 }
                 else {
-                    p = p->suffix;
-                    ++start;
-
-                    if(p == &root) {
+                    if(p == p->suffix) {
                         ++it;
-                        start = it;
                     }
+                    p = p->suffix;
+                }
+
+                if(p->inDict) {
+                    input.replace(it - p->depth, it, p->depth, '*');
+                    p = &root;
+                }
+
+                if(p->dict_suffix != nullptr) {
+                    p = p->dict_suffix;
+                    input.replace(it - p->depth, it, p->depth, '*');
+                    p = &root;
                 }
             }
 
@@ -39,6 +40,7 @@ namespace text_filter {
 
         void aho_corasick::build_trie(unordered_set<wstring> blocked_words)
         {
+            root.depth = 0;
             for(auto const& word : blocked_words) {
                 root.add_word(word);
             }
@@ -64,6 +66,7 @@ namespace text_filter {
             for(auto const& c : word) {
                 if(p->child.count(c) == 0) {
                     p->child[c] = make_shared<node>();
+                    p->child[c]->depth = p->depth + 1;
                 }
 
                 p = p->child[c].get();

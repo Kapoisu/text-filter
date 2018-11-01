@@ -14,7 +14,7 @@ namespace text_filter {
         using std::chrono::high_resolution_clock;
         using std::chrono::seconds;
         using std::chrono::duration_cast;
-        using algorithm::knuth_morris_pratt;
+		using namespace algorithm;
 
         unsigned num;
         wifstream dict("pattern.txt");
@@ -31,32 +31,79 @@ namespace text_filter {
         }
 
         wstring buffer;
-        int count = 0;
         while(dict >> buffer) {
             wcout << L"add word: ";
             wcout << buffer << endl;
             filter.add_word(buffer);
-            count++;
         }
 
         dict.close();
 
         wcout << endl << "generating test cases..." << endl;
 
-        wifstream testcase("testdata.txt");
+        wifstream test_brute_force("testdata.txt");
 
         auto start = high_resolution_clock::now();
 
-        while(getline(testcase, buffer)) {
-            wcout << L"\ninput: " << buffer << L"\n";
-            wcout << L"\noutput: " << filter.filter(buffer) << L"\n";
-            wcout << L"\noutput: " << filter.filter(buffer, knuth_morris_pratt()) << L"\n";
-        }
+        /*for(auto i = 0; i < num; ++i) {
+            if(!getline(test_brute_force, buffer)) {
+                break;
+            }
+			if (i % 10000 == 0) {
+				wcout << L"\nprocessing the " << i << "th test case..." << endl;
+			}
 
-        auto end = high_resolution_clock::now();
+            filter.filter(buffer, brute_force());
+        }*/
 
-        wcout << endl << L"computing time: " << duration_cast<seconds>(end - start).count() << "s" << endl;
+		auto end = high_resolution_clock::now();
 
-        wcout << endl << "test finish." << endl;
+		wcout << L"\nusing brute-force algorithm..." << endl;
+		wcout << L"test case amount: " << num << endl;
+		wcout << L"computing time: " << duration_cast<seconds>(end - start).count() << "s" << endl;
+
+		wifstream test_kmp("testdata.txt");
+
+		start = high_resolution_clock::now();
+
+		for (auto i = 0; i < num; ++i) {
+			if (!getline(test_kmp, buffer)) {
+				break;
+			}
+			if (i % 10000 == 0) {
+				wcout << L"\nprocessing the " << i << "th test case..." << endl;
+			}
+
+			filter.filter(buffer, knuth_morris_pratt());
+		}
+
+		end = high_resolution_clock::now();
+
+		wcout << L"\nusing Knuth-Morris-Pratt algorithm..." << endl;
+		wcout << L"test case amount: " << num << endl;
+		wcout << L"computing time: " << duration_cast<seconds>(end - start).count() << "s" << endl;
+
+		wifstream test_aho_corasick("testdata.txt");
+
+		start = high_resolution_clock::now();
+
+		for (auto i = 0; i < num; ++i) {
+			if (!getline(test_aho_corasick, buffer)) {
+				break;
+			}
+			if (i % 10000 == 0) {
+				wcout << L"\nprocessing the " << i << "th test case..." << endl;
+			}
+
+			filter.filter(buffer, aho_corasick());
+		}
+
+		end = high_resolution_clock::now();
+
+		wcout << L"\nusing Aho-Corasick algorithm..." << endl;
+		wcout << L"test case amount: " << num << endl;
+		wcout << L"computing time: " << duration_cast<seconds>(end - start).count() << "s" << endl;
+
+        wcout << "\ntest finish." << endl;
     }
 }

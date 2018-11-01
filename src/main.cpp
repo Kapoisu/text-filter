@@ -20,6 +20,7 @@ int main()
     wcout << L"Enter \"help\" to see the manual.\n" << endl;
     while(true) {
         wcout << L"$ text-filter ";
+        wcout.flush();
         wcin >> option;
 
         if(option == L"add") {
