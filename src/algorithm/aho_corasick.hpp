@@ -14,13 +14,13 @@ namespace text_filter {
         private:
             struct node {
             public:
-                node() : inDict(false), suffix(nullptr)/*, dict_suffix(nullptr)*/ {}
+                node() : inDict(false), suffix(nullptr), dict_suffix(nullptr) {}
                 void add_word(std::wstring);
                 void add_suffix(node* root);
                 std::unordered_map<char, std::shared_ptr<node>> child;
                 bool inDict;
                 node* suffix;
-                //node* dict_suffix;
+                node* dict_suffix;
             };
 
             node root;

@@ -96,14 +96,14 @@ namespace text_filter {
                     n.second->suffix = p->suffix->child[n.first].get();
                 }
 
-                /* p = n.second->suffix;
+                p = n.second->suffix;
                 while(!p->inDict && p != root) {
                     p = p->suffix;
                 }
 
                 if(p != root) {
                     n.second->dict_suffix = p;
-                } */
+                }
             }
         }
     }

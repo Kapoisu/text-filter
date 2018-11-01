@@ -30,7 +30,7 @@ int main()
         else if(option == L"filter") {
             wcin.ignore();
             getline(wcin,input);
-            wcout << L"filter input: " << input << endl;
+            wcout << L"input: " << input << endl;
             wcout << L"output: " << filter.filter(input) << endl;
         }
         else if(option == L"reset") {

@@ -484,7 +484,6 @@ check
 game
 shape
 equate
-hot
 miss
 brought
 heat
