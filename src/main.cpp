@@ -2,7 +2,6 @@
 #include <locale>
 #include <sstream>
 #include <string>
-#include <unordered_set>
 #include "string_filter.hpp"
 #include "test_filter.hpp"
 
