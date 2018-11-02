@@ -4,10 +4,10 @@ namespace text_filter {
     namespace algorithm {
         using namespace std;
 
-        wstring brute_force::operator()(wstring input, unordered_set<wstring> blocked_words)
+        wstring brute_force::operator()(wstring input, unordered_set<wstring>& blocked_words)
         {
             for(auto const& word : blocked_words) {
-                input = operator()(move(input), word);
+                input = operator()(input, word);
             }
 
             return input;

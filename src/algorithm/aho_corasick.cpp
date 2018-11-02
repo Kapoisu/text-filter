@@ -5,7 +5,7 @@ namespace text_filter {
     namespace algorithm {
         using namespace std;
 
-        wstring aho_corasick::operator()(wstring input, unordered_set<wstring> blocked_words)
+        wstring aho_corasick::operator()(wstring input, unordered_set<wstring>& blocked_words)
         {
             auto size = blocked_words.size();
             if(blocked_words.size() != number_of_node) {
@@ -41,7 +41,7 @@ namespace text_filter {
             return input;
         }
 
-        void aho_corasick::build_trie(unordered_set<wstring> blocked_words)
+        void aho_corasick::build_trie(unordered_set<wstring>& blocked_words)
         {
             root.depth = 0;
             for(auto const& word : blocked_words) {

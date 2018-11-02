@@ -9,7 +9,7 @@ namespace text_filter {
     namespace algorithm {
         class aho_corasick : public algo_base {
         public:
-            std::wstring operator()(std::wstring input, std::unordered_set<std::wstring> blocked_words);
+            std::wstring operator()(std::wstring input, std::unordered_set<std::wstring>& blocked_words);
             std::wstring get_name() { return L"Aho-Corasick"; }
         private:
             struct node {
@@ -27,7 +27,7 @@ namespace text_filter {
             node root;
             int number_of_node;
             bool is_modified;
-            void build_trie(std::unordered_set<std::wstring> blocked_words);
+            void build_trie(std::unordered_set<std::wstring>& blocked_words);
         };
     }
 }

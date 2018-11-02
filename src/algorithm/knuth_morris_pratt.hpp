@@ -8,7 +8,7 @@ namespace text_filter {
     namespace algorithm {
         class knuth_morris_pratt : public algo_base {
         public:
-            std::wstring operator()(std::wstring input, std::unordered_set<std::wstring> blocked_words);
+            std::wstring operator()(std::wstring input, std::unordered_set<std::wstring>& blocked_words);
             std::wstring get_name() { return L"Knuth-Morris-Pratt"; }
         private:
             std::wstring operator()(std::wstring input, std::wstring word);

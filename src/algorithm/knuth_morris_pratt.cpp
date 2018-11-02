@@ -6,14 +6,16 @@ namespace text_filter {
     namespace algorithm {
         using namespace std;
 
-        wstring knuth_morris_pratt::operator()(wstring input, unordered_set<wstring> blocked_words)
+        wstring knuth_morris_pratt::operator()(wstring input, unordered_set<wstring>& blocked_words)
         {
             for(auto const& word : blocked_words) {
-                generate_table(word);
+                if(offset_if_fail.count(word) > 0) {
+                    continue;
+                }
             }
 
             for(auto const& pair : offset_if_fail) {
-                input = operator()(move(input), pair.first);
+                input = operator()(input, pair.first);
             }
 
             return input;
@@ -48,10 +50,6 @@ namespace text_filter {
 
         void knuth_morris_pratt::generate_table(wstring key)
         {
-            if(offset_if_fail.count(key) > 0) {
-                return;
-            }
-
             vector<int> table(key.size() + 1);
 
             table[0] = -1;
