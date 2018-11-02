@@ -1,5 +1,6 @@
 #include <iostream>
 #include <locale>
+#include <sstream>
 #include <string>
 #include <unordered_set>
 #include "string_filter.hpp"
@@ -14,38 +15,41 @@ int main()
     setlocale(LC_ALL, "");
 
     string_filter filter;
-    wstring option;
-    wstring input;
+    wstring command;
+    wstring operation;
+    wstring argument;
 
     wcout << L"Enter \"help\" to see the manual.\n" << endl;
     while(true) {
         wcout << L"$ text-filter ";
         wcout.flush();
-        wcin >> option;
+        getline(wcin, command);
+        wstringstream input(command);
+        input >> operation;
 
-        if(option == L"add") {
-            wcin >> input;
-            wcout << L"add word: " << input << endl;
-            filter.add_word(input);
+        if(operation == L"add") {
+            while(input >> argument) {
+                wcout << L"add word: " << argument << endl;
+                filter.add_word(argument);
+            }
         }
-        else if(option == L"filter") {
-            wcin.ignore();
-            getline(wcin,input);
-            wcout << L"input: " << input << endl;
-            wcout << L"output: " << filter.filter(input) << endl;
+        else if(operation == L"filter") {
+            getline(input, argument);
+            wcout << L"input: " << argument << endl;
+            wcout << L"output: " << filter.filter(argument) << endl;
         }
-        else if(option == L"reset") {
+        else if(operation == L"reset") {
             wcout << L"reset filter." << endl;
             filter.reset();
         }
-        else if(option == L"quit") {
+        else if(operation == L"quit") {
             break;
         }
-        else if(option == L"test") {
+        else if(operation == L"test") {
             test_filter test;
             test.run();
         }
-        else if(option == L"help") {
+        else if(operation == L"help") {
             wcout << L"add: add a word you want to block." << endl;
             wcout << L"filter: generate the filtered output." << endl;
             wcout << L"reset: clear already added words." << endl;
@@ -53,7 +57,7 @@ int main()
             wcout << L"quit: exit the program." << endl;
         }
         else {
-            wcout << option << L": command not found." << endl;
+            wcout << operation << L": command not found." << endl;
         }
 
         wcout << endl;

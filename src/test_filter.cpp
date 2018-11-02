@@ -58,15 +58,15 @@ namespace text_filter {
 
 		auto end = high_resolution_clock::now();
 
-		wcout << L"\nusing brute-force algorithm..." << endl;
+		/* wcout << L"\nusing brute-force algorithm..." << endl;
 		wcout << L"test case amount: " << num << endl;
 		wcout << L"computing time: " << duration_cast<seconds>(end - start).count() << "s" << endl;
 
-		wifstream test_kmp("testdata.txt");
+		wifstream test_kmp("testdata.txt"); */
 
 		start = high_resolution_clock::now();
 
-		for (auto i = 0; i < num; ++i) {
+		/* for (auto i = 0; i < num; ++i) {
 			if (!getline(test_kmp, buffer)) {
 				break;
 			}
@@ -75,13 +75,13 @@ namespace text_filter {
 			}
 
 			filter.filter(buffer, knuth_morris_pratt());
-		}
+		} */
 
 		end = high_resolution_clock::now();
 
-		wcout << L"\nusing Knuth-Morris-Pratt algorithm..." << endl;
+		/* wcout << L"\nusing Knuth-Morris-Pratt algorithm..." << endl;
 		wcout << L"test case amount: " << num << endl;
-		wcout << L"computing time: " << duration_cast<seconds>(end - start).count() << "s" << endl;
+		wcout << L"computing time: " << duration_cast<seconds>(end - start).count() << "s" << endl; */
 
 		wifstream test_aho_corasick("testdata.txt");
 
