@@ -17,7 +17,7 @@ namespace text_filter {
                 node() : inDict(false), suffix(nullptr), dict_suffix(nullptr) {}
                 void add_word(std::wstring word);
                 void add_suffix(node* root);
-                std::unordered_map<char, node*> child;
+                std::unordered_map<char, std::shared_ptr<node>> child;
                 int depth;
                 bool inDict;
                 node* suffix;

@@ -7,6 +7,7 @@ namespace text_filter {
 
         wstring aho_corasick::operator()(wstring input, unordered_set<wstring> blocked_words)
         {
+            auto size = blocked_words.size();
             if(blocked_words.size() != number_of_node) {
                 build_trie(blocked_words);
                 number_of_node = blocked_words.size();
@@ -17,7 +18,7 @@ namespace text_filter {
 
             while(it != input.cend()) {
                 if(p->child.count(*it) > 0) {
-                    p = p->child[*it++];
+                    p = p->child[*it++].get();
                 }
                 else {
                     if(p == p->suffix) {
@@ -55,7 +56,7 @@ namespace text_filter {
                 p.add_suffix(&root);
 
                 for(auto const& n : p.child) {
-                    q.push(n.second);
+                    q.push(n.second.get());
                 }
 
                 q.pop();
@@ -68,11 +69,11 @@ namespace text_filter {
 
             for(auto const& c : word) {
                 if(p->child.count(c) == 0) {
-                    p->child[c] = new node();
+                    p->child[c] = make_shared<node>();
                     p->child[c]->depth = p->depth + 1;
                 }
 
-                p = p->child[c];
+                p = p->child[c].get();
             }
 
             p->inDict = true;
@@ -99,7 +100,7 @@ namespace text_filter {
                     n.second->suffix = p;
                 }
                 else {
-                    n.second->suffix = p->suffix->child[n.first];
+                    n.second->suffix = p->suffix->child[n.first].get();
                 }
 
                 p = n.second->suffix;

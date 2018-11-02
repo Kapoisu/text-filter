@@ -11,11 +11,10 @@ namespace text_filter {
         using std::wifstream;
         using std::wstring;
         using std::endl;
-        using std::chrono::high_resolution_clock;
-        using std::chrono::seconds;
-        using std::chrono::duration_cast;
+        using namespace std::chrono;
 		using namespace algorithm;
 
+        aho_corasick func;
         unsigned num;
         wifstream dict("pattern.txt");
 
@@ -91,18 +90,18 @@ namespace text_filter {
 			if (!getline(test_aho_corasick, buffer)) {
 				break;
 			}
-			if (i % 10000 == 0) {
-				wcout << L"\nprocessing the " << i << "th test case..." << endl;
+			if (i + 1 % 10000 == 0) {
+				wcout << L"\nprocessing the " << i + 1 << "th test case..." << endl;
 			}
 
-			filter.filter(buffer, aho_corasick());
+			filter.filter(buffer, std::ref(func));
 		}
 
 		end = high_resolution_clock::now();
 
 		wcout << L"\nusing Aho-Corasick algorithm..." << endl;
 		wcout << L"test case amount: " << num << endl;
-		wcout << L"computing time: " << duration_cast<seconds>(end - start).count() << "s" << endl;
+		wcout << L"computing time: " << duration_cast<milliseconds>(end - start).count() << "ms" << endl;
 
         wcout << "\ntest finish." << endl;
     }
