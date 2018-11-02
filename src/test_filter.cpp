@@ -1,108 +1,90 @@
-#include <iostream>
 #include <chrono>
-#include <fstream>
+#include <iostream>
+#include "string_filter.hpp"
 #include "test_filter.hpp"
+#include "algorithm/algo_base.hpp"
 
 namespace text_filter {
+    using namespace std;
+    using namespace algorithm;
+
     void test_filter::run()
     {
-        using std::wcin;
-        using std::wcout;
-        using std::wifstream;
-        using std::wstring;
-        using std::endl;
-        using namespace std::chrono;
-		using namespace algorithm;
+        brute_force func_brute_force;
+        knuth_morris_pratt func_kmp;
+        aho_corasick func_aho_corasick;
 
-        aho_corasick func;
         unsigned num;
-        wifstream dict("pattern.txt");
 
-        wcout << L"starting to run test...\n" << endl;
-        wcout << L"enter the number of test case: ";
+        wcout << L"Starting to run test...\n\n";
+
+        wcout << L"Enter the number of test case: ";
         wcin >> num;
+        wcin.ignore();
 
-        wcin.tie(0);
+        wcout << L"Enter the name of file that contains the string patterns you want to filter (default: pattern.txt): ";
+        open_resource_file(L"", "pattern.txt");
 
-        if(!dict.is_open()) {
-            wcout << L"file not found." << endl;
-            return;
-        }
-
+        wcout << L"Loading the patterns...\n" << endl;
         wstring buffer;
-        while(dict >> buffer) {
-            wcout << L"add word: ";
-            wcout << buffer << endl;
+        while(fs >> buffer) {
             filter.add_word(buffer);
         }
+        fs.close();
 
-        dict.close();
+        wcout << L"Enter the name of file that contains the test cases (default: testdata.txt): ";
+        open_resource_file(L"", "testdata.txt");
 
-        wcout << endl << "generating test cases..." << endl;
+        test_algorithm(func_brute_force, num);
 
-        wifstream test_brute_force("testdata.txt");
+        test_algorithm(func_kmp, num);
 
-        auto start = high_resolution_clock::now();
+        test_algorithm(func_aho_corasick, num);
 
-        /*for(auto i = 0; i < num; ++i) {
-            if(!getline(test_brute_force, buffer)) {
+        wcout << "\nTest finish." << endl;
+    }
+
+    void test_filter::open_resource_file(wstring filename, string _filename = "")
+    {
+        do {
+            getline(wcin, filename);
+            //issue: cannot pass wstring
+            fs.open(_filename);
+
+            if(!fs.is_open()) {
+                wcout << L": file not found.";
+                wcout << L"Enter the filename: ";
+                filename.clear();
+            }
+        } while(!fs.is_open());
+    }
+
+    void test_filter::test_algorithm(algo_base& algo, unsigned times)
+    {
+        using namespace chrono;
+
+        wstring buffer;
+
+        wcout << L"\nUsing "<< algo.get_name() << L" algorithm...\n" << endl;
+
+		auto start = high_resolution_clock::now();
+
+        fs.seekg(0);
+        for(auto i = 0; i < times; ++i) {
+            if(!getline(fs, buffer)) {
                 break;
             }
-			if (i % 10000 == 0) {
-				wcout << L"\nprocessing the " << i << "th test case..." << endl;
+
+            if (i + 1 % 1000 == 0) {
+				wcout << L"Processing the " << i + 1 << "th test case..." << endl;
 			}
 
-            filter.filter(buffer, brute_force());
-        }*/
+            filter.filter(buffer, std::ref(algo));
+        }
 
 		auto end = high_resolution_clock::now();
 
-		/* wcout << L"\nusing brute-force algorithm..." << endl;
-		wcout << L"test case amount: " << num << endl;
-		wcout << L"computing time: " << duration_cast<seconds>(end - start).count() << "s" << endl;
-
-		wifstream test_kmp("testdata.txt"); */
-
-		start = high_resolution_clock::now();
-
-		/* for (auto i = 0; i < num; ++i) {
-			if (!getline(test_kmp, buffer)) {
-				break;
-			}
-			if (i % 10000 == 0) {
-				wcout << L"\nprocessing the " << i << "th test case..." << endl;
-			}
-
-			filter.filter(buffer, knuth_morris_pratt());
-		} */
-
-		end = high_resolution_clock::now();
-
-		/* wcout << L"\nusing Knuth-Morris-Pratt algorithm..." << endl;
-		wcout << L"test case amount: " << num << endl;
-		wcout << L"computing time: " << duration_cast<seconds>(end - start).count() << "s" << endl; */
-
-		wifstream test_aho_corasick("testdata.txt");
-
-		start = high_resolution_clock::now();
-
-		for (auto i = 0; i < num; ++i) {
-			if (!getline(test_aho_corasick, buffer)) {
-				break;
-			}
-			if (i + 1 % 10000 == 0) {
-				wcout << L"\nprocessing the " << i + 1 << "th test case..." << endl;
-			}
-
-			filter.filter(buffer, std::ref(func));
-		}
-
-		end = high_resolution_clock::now();
-
-		wcout << L"\nusing Aho-Corasick algorithm..." << endl;
-		wcout << L"test case amount: " << num << endl;
-		wcout << L"computing time: " << duration_cast<milliseconds>(end - start).count() << "ms" << endl;
-
-        wcout << "\ntest finish." << endl;
+		wcout << L"Test case amount: " << times;
+		wcout << L"\nComputing time: " << duration_cast<milliseconds>(end - start).count() << "ms" << endl;
     }
 }

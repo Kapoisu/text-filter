@@ -1,15 +1,15 @@
 #ifndef KNUTH_MORRIS_PRATT
 #define KNUTH_MORRIS_PRATT
 
-#include <string>
 #include <unordered_map>
-#include <unordered_set>
+#include "algo_base.hpp"
 
 namespace text_filter {
     namespace algorithm {
-        class knuth_morris_pratt {
+        class knuth_morris_pratt : public algo_base {
         public:
             std::wstring operator()(std::wstring input, std::unordered_set<std::wstring> blocked_words);
+            std::wstring get_name() { return L"Knuth-Morris-Pratt"; }
         private:
             std::wstring operator()(std::wstring input, std::wstring word);
             void generate_table(std::wstring key);

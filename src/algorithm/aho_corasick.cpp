@@ -31,8 +31,7 @@ namespace text_filter {
                     input.replace(it - p->depth, it, p->depth, '*');
                     p = &root;
                 }
-
-                if(p->dict_suffix != nullptr) {
+                else if(p->dict_suffix != nullptr) {
                     p = p->dict_suffix;
                     input.replace(it - p->depth, it, p->depth, '*');
                     p = &root;

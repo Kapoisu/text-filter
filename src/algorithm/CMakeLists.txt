@@ -1,1 +1,1 @@
-add_library(algorithm aho_corasick.cpp brute_force.cpp knuth_morris_pratt.cpp)
+add_library(algorithm aho_corasick.cpp brute_force.cpp knuth_morris_pratt.cpp algo_base.hpp)

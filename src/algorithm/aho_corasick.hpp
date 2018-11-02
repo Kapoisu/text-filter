@@ -2,15 +2,15 @@
 #define AHO_CORASICK
 
 #include <memory>
-#include <string>
 #include <unordered_map>
-#include <unordered_set>
+#include "algo_base.hpp"
 
 namespace text_filter {
     namespace algorithm {
-        class aho_corasick {
+        class aho_corasick : public algo_base {
         public:
             std::wstring operator()(std::wstring input, std::unordered_set<std::wstring> blocked_words);
+            std::wstring get_name() { return L"Aho-Corasick"; }
         private:
             struct node {
             public:
@@ -26,6 +26,7 @@ namespace text_filter {
 
             node root;
             int number_of_node;
+            bool is_modified;
             void build_trie(std::unordered_set<std::wstring> blocked_words);
         };
     }

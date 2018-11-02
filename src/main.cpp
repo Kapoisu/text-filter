@@ -61,5 +61,7 @@ int main()
         }
 
         wcout << endl;
+
+        operation.clear();
     };
 }
