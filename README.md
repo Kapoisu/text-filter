@@ -58,10 +58,26 @@ Iterate our input one by one, and use a pointer to track the current node in the
 ### Time Complexity
 The time complexity of the algorithm is **O(m + n + l)**, where **m** is the number of output matches, **n** is the length of the input text, and **l** is the length of each patterns. In this application, we only need to find one match in each iteration at most, where **m** is either 0 or 1. Therefore, the actual time complexity is **O(n + l)**.
 ### Space Complexity
-The space complexity varies from the composition of patterns. The worst case is **O(n)**, where **n** is the total length of all patterns (in this case, any of which is not a substring of others).
-
+The space complexity varies from the composition of patterns. The worst case is **O(n)**, where **n** is the total length of all patterns (in this case, any of which is not a substring of others.)
 ## Test
 I used http://www.randomtextgenerator.com/ to generate test cases because it produced meaningful vocabularies randomly. If I generated random characters and constructed them to string literals by myself, there would have been very low probabiliy matching patterns with a decent length. In addition, filter patterns were downloaded from the internet (something like "The Most Common Used 1000 Vocabularies".)
 
-At the beginning, I'd tried to use C++ to write the test cases generating program; however, it is quite difficult to do network programming without a proper third-party library. I ended up writing a C# program - which is excluded from the repository - to finish the task.
-## Performance
+At the beginning, I'd tried to use C++ to write the test cases generating program; however, it is quite difficult to do cross-platform network programming without a proper third-party library. I ended up writing a C# program - which is excluded from the repository - to finish the task.
+## Benchmark
+| pattern = 1000  | n = 20 | n = 200 | n = 2000 | n = 20000 | n = 200000 |
+|-----------------|--------|---------|----------|-----------|------------|
+|                 |      0 |      31 |      281 |      2593 |      28419 |
+|                 |      0 |      15 |      269 |      2640 |      27783 |
+|                 |      0 |      31 |      281 |      2666 |      27272 |
+|                 |      0 |      31 |      265 |      2628 |      27580 |
+|                 |      0 |      31 |      265 |      2671 |      26817 |
+
+| pattern = 10000 | n = 20 | n = 200 | n = 2000 | n = 20000 | n = 200000 |
+|-----------------|--------|---------|----------|-----------|------------|
+|                 |     62 |     331 |     2878 |     25939 |     265410 |
+|                 |     46 |     282 |     2926 |     26193 |     263895 |
+|                 |     46 |     265 |     2774 |     27518 |     257631 |
+|                 |     46 |     281 |     2462 |     25232 |     257867 |
+|                 |     46 |     265 |     2939 |     25484 |     267636 |
+## Optimize
+The program can be optimized by dividing the input sequence into several parts, and processing them parallelly.
