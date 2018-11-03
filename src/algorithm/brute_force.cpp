@@ -25,7 +25,7 @@ namespace text_filter {
                 }
 
                 if(matched) {
-                    input.replace(input.cbegin() + i, input.cbegin() + i + word.size(), word.size(),'*');
+                    input.replace(input.cbegin() + i, input.cbegin() + i + word.size(), word.size(), '*');
                 }
             }
 

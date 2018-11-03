@@ -1,6 +1,5 @@
 #include <chrono>
 #include <iostream>
-#include "string_filter.hpp"
 #include "test_filter.hpp"
 #include "algorithm/algo_base.hpp"
 
@@ -23,7 +22,7 @@ namespace text_filter {
         wcin.ignore();
 
         wcout << L"Enter the name of file that contains the string patterns you want to filter (default: pattern.txt): ";
-        open_resource_file(L"", "pattern.txt");
+        open_resource_file<resource_type::pattern>();
 
         wcout << L"Loading the patterns...\n" << endl;
         wstring buffer;
@@ -33,7 +32,7 @@ namespace text_filter {
         fs.close();
 
         wcout << L"Enter the name of file that contains the test cases (default: testdata.txt): ";
-        open_resource_file(L"", "testdata.txt");
+        open_resource_file<resource_type::testdata>();
 
         test_algorithm(func_brute_force, num);
 
@@ -44,16 +43,18 @@ namespace text_filter {
         wcout << "\nTest finish." << endl;
     }
 
-    void test_filter::open_resource_file(wstring filename, string _filename = "")
+    template<test_filter::resource_type R>
+    void test_filter::open_resource_file()
     {
         do {
+            wstring filename;
             getline(wcin, filename);
             //issue: cannot pass wstring
-            fs.open(_filename);
+            fs.open(get_default_filename<R>());
 
             if(!fs.is_open()) {
-                wcout << L": file not found.";
-                wcout << L"Enter the filename: ";
+                wcout << L": file not found.\n";
+                wcout << L"Enter the filename again: ";
                 filename.clear();
             }
         } while(!fs.is_open());
@@ -70,19 +71,19 @@ namespace text_filter {
 		auto start = high_resolution_clock::now();
 
         fs.seekg(0);
-        for(auto i = 0; i < times; ++i) {
+        for(auto i = 1; i <= times; ++i) {
             if(!getline(fs, buffer)) {
                 break;
             }
 
             if (i + 1 % 1000 == 0) {
-				wcout << L"Processing the " << i + 1 << "th test case..." << endl;
+				wcout << L"Processing the " << i << "th test case..." << endl;
 			}
 
             filter.filter(buffer, std::ref(algo));
         }
 
-		auto end = high_resolution_clock::now();
+        auto end = high_resolution_clock::now();
 
 		wcout << L"Test case amount: " << times;
 		wcout << L"\nComputing time: " << duration_cast<milliseconds>(end - start).count() << "ms" << endl;

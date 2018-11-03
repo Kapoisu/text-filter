@@ -14,7 +14,6 @@ namespace text_filter {
     public:
         void add_word(std::wstring word);
         void reset();
-        std::unordered_set<std::wstring> list_all_blocked_words() const;
         std::wstring filter(std::wstring input);
         template<typename FilterAlgorithm>
         std::wstring filter(std::wstring input, FilterAlgorithm algo)
