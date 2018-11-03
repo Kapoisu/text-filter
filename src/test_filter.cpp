@@ -85,7 +85,7 @@ namespace text_filter {
 
         auto end = high_resolution_clock::now();
 
-		wcout << L"Test case amount: " << times;
-		wcout << L"\nComputing time: " << duration_cast<milliseconds>(end - start).count() << "ms" << endl;
+        wcout << L"Test case amount: " << times;
+        wcout << L"\nComputing time: " << duration_cast<milliseconds>(end - start).count() << "ms" << endl;
     }
 }
