@@ -68,7 +68,7 @@ namespace text_filter {
 
         wcout << L"\nUsing "<< algo.get_name() << L" algorithm...\n" << endl;
 
-		auto start = high_resolution_clock::now();
+        auto start = high_resolution_clock::now();
 
         fs.seekg(0);
         for(auto i = 1; i <= times; ++i) {
@@ -76,10 +76,10 @@ namespace text_filter {
                 break;
             }
 
-            if (i + 1 % 1000 == 0) {
-				wcout << L"Processing the " << i << "th test case..." << endl;
-			}
-
+            if (i % 1000 == 0) {
+                wcout << L"Processing the " << i << "th test case..." << endl;
+            }
+            
             filter.filter(buffer, std::ref(algo));
         }
 
