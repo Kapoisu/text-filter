@@ -21,11 +21,6 @@ namespace text_filter {
         blocked_words.clear();
     }
 
-    unordered_set<wstring> string_filter::list_all_blocked_words() const
-    {
-        return blocked_words;
-    }
-
     wstring string_filter::filter(wstring input)
     {
         return filter(move(input), aho_corasick());
