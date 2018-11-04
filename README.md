@@ -74,10 +74,10 @@ At the beginning, I'd tried to use C++ to write the test cases generating progra
 
 | pattern = 10000 | n = 20 | n = 200 | n = 2000 | n = 20000 | n = 200000 |
 |-----------------|--------|---------|----------|-----------|------------|
-|                 |     16 |      25 |       90 |       748 |       7412 |
-|                 |     17 |      25 |       87 |       748 |       7439 |
-|                 |     21 |      25 |       90 |       743 |       7420 |
-|                 |     18 |      22 |       91 |       756 |       7630 |
-|                 |     17 |      24 |       90 |       755 |       7351 |
+|                 |     16 |      25 |      102 |       895 |       8764 |
+|                 |     17 |      27 |      107 |       887 |       9071 |
+|                 |     21 |      27 |      107 |       879 |       8705 |
+|                 |     18 |      29 |      107 |       870 |       8848 |
+|                 |     17 |      27 |      103 |       864 |       8561 |
 ## Optimize
 The program can be optimized by dividing the input sequence into several parts, and processing them parallelly.
