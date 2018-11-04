@@ -13,7 +13,7 @@ namespace text_filter {
 
     void string_filter::add_word(wstring word)
     {
-        blocked_words.insert(word);
+        blocked_words.insert(move(word));
     }
 
     void string_filter::reset()

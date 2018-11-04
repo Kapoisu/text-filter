@@ -11,7 +11,6 @@ namespace text_filter {
         void run();
     private:
         string_filter filter;
-        std::wifstream fs;
 
         enum class resource_type {
             pattern,
@@ -21,7 +20,7 @@ namespace text_filter {
         void test_algorithm(algorithm::algo_base&, unsigned times = 1);
 
         template<resource_type R>
-        void open_resource_file();
+        std::wifstream open_resource_file(std::wstring message);
 
         template<resource_type R>
         std::string get_default_filename()

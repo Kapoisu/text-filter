@@ -7,7 +7,6 @@ namespace text_filter {
 
         wstring aho_corasick::operator()(wstring input, unordered_set<wstring>& blocked_words)
         {
-            auto size = blocked_words.size();
             if(blocked_words.size() != number_of_node) {
                 build_trie(blocked_words);
                 number_of_node = blocked_words.size();
@@ -45,7 +44,7 @@ namespace text_filter {
         {
             root.depth = 0;
             for(auto const& word : blocked_words) {
-                root.add_word(word);
+                root.add_word(move(word));
             }
 
             queue<node*> q;
@@ -68,7 +67,7 @@ namespace text_filter {
 
             for(auto const& c : word) {
                 if(p->child.count(c) == 0) {
-                    p->child[c] = make_shared<node>();
+                    p->child[c] = unique_ptr<node>(new node);
                     p->child[c]->depth = p->depth + 1;
                 }
 

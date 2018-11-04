@@ -7,7 +7,7 @@ namespace text_filter {
         wstring brute_force::operator()(wstring input, unordered_set<wstring>& blocked_words)
         {
             for(auto const& word : blocked_words) {
-                input = operator()(input, word);
+                input = operator()(move(input), word);
             }
 
             return input;

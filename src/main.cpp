@@ -35,7 +35,7 @@ int main()
         else if(operation == L"filter") {
             getline(input, argument);
             wcout << L"input: " << argument << endl;
-            wcout << L"output: " << filter.filter(argument) << endl;
+            wcout << L"output: " << filter.filter(move(argument)) << endl;
         }
         else if(operation == L"reset") {
             wcout << L"reset filter." << endl;

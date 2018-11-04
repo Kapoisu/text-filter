@@ -18,7 +18,7 @@ namespace text_filter {
         template<typename FilterAlgorithm>
         std::wstring filter(std::wstring input, FilterAlgorithm algo)
         {
-            return algo(input, blocked_words);
+            return algo(move(input), blocked_words);
         }
     private:
         std::unordered_set<std::wstring> blocked_words;
